@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <?!= include('css'); ?>
+</head>
+<body>
+  <div class="wrapper">
+    <div id="header">
+      <h1>ユーザー登録</h1>
+    </div>
+    <div class="main">
+      <div class="input">
+        ID: <input type="txt" id="id" /><br>
+        PASS: <input type="txt" id="password" /><br>
+        氏名: <input type="txt" id="name" /><br>
+        住所: <input type="txt" id="address" /><br>
+        電話: <input type="txt" id="tel" /><br>
+        学校: <input type="txt" id="school" /><br>
+        <button type="button">登録</button>
+      </div>
+      <input type="button" onclick="location.href= '<?= getScriptUrl(1); ?>'" value="ログイン画面へ">
+    </div>
+    <a href="https://script.google.com/a/esm.co.jp/macros/s/AKfycbzqcWJrLSbYXf4DzqG3M4BjWXwD1LsfgsisAY5OcEyh/dev?p=login">ログイン画面へ</a><br>
+  </div>
+  <div id=" footer">採用サイト 2020 模擬開発
+  </div>
+</body>
+</html>
