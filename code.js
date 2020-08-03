@@ -6,6 +6,8 @@ function doGet(e) {
     return HtmlService.createTemplateFromFile("mypage").evaluate();
   } else if (page == "event") {
     return HtmlService.createTemplateFromFile("event").evaluate();
+  } else if (page == "signup") {
+    return HtmlService.createTemplateFromFile("signup").evaluate();
   }
 }
 
