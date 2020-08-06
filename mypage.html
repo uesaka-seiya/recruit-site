@@ -8,7 +8,6 @@
   <div class="wrapper">
     <div id="header">
       <h1>マイページ</h1>
-      <!--氏名はDBより取得予定-->
       <p id="user-name"><?= getUserName(id); ?>さん</p>
     </div>
     <div class="main">
@@ -19,16 +18,20 @@
             <th>内容</th>
             <th>申込状況</th>
           </tr>
+          <? const events = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("events"); ?>
+          <? lastRow = events.getLastRow(); ?>
+          <? const values = events.getRange(2, 2, lastRow -1, 4).getValues(); ?>
+          <? for (let i = 0; i < lastRow-1 ; i++) { ?>
           <tr>
-            <td>2020年8月3日</td>
-            <td>
-              <a href="https://script.google.com/a/esm.co.jp/macros/s/AKfycbzqcWJrLSbYXf4DzqG3M4BjWXwD1LsfgsisAY5OcEyh/dev?p=event">sampleEvent</a><br>
-            </td>
+            <td><?= Utilities.formatDate(values[i][1], 'Asia/Tokyo', 'yyyy年MM月dd日'); ?></td>
+            <td><?= values[i][0]; ?></td>
             <td>
               <button type="button">申込</button>
               <button type="button">キャンセル</button>
             </td>
           </tr>
+          <? } ?>
+          <tr></tr>
         </table>
       </div>
       <input type="button" onclick="location.href= '<?= getScriptUrl(1); ?>'" value="ログアウト">
