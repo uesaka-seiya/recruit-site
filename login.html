@@ -31,12 +31,12 @@
     var password = document.getElementById("password").value;
     google.script.run
       .withFailureHandler(onFailure)
-      .withSuccessHandler(jump)
+      .withSuccessHandler(onSuccess)
       .loginCheck_gs(id, password);
   }
 
-  function jump(userData) {
-    window.top.location.href = userData[1];
+  function jump(url) {
+    window.top.location.href = url;
   }
 
   function onFailure(e) {

@@ -24,14 +24,20 @@ function loginCheck_gs(loginId, loginPassword) {
   for (let i = 2; i <= sheet.getLastRow(); i++) {
     if (loginId === sheet.getRange(i, 1).getValue()) {
       if (loginPassword === sheet.getRange(i, 2).getValue()) {
-        var userData = sheet.getRange(i, 1, 1, 3).getValues();
-        userData.push(getScriptUrl(2) + "&id=" + userData[0][1])
-        sheet.getRange(i, 4).setValue(userData[1]);
-        return userData;
+        return getScriptUrl(2) + "&id=" + sheet.getRange(i, 1).getValue();
       }
     }
   }
   throw "IDまたはパスワードが誤りです";
+}
+
+function getUserName(id) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("loginCheck");
+  for (let i = 2; i <= sheet.getLastRow(); i++) {
+    if (id === sheet.getRange(i, 1).getValue()) {
+      return sheet.getRange(i, 3).getValue();
+    }
+  }
 }
 
 function getScriptUrl(i) {

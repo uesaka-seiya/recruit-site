@@ -9,7 +9,7 @@
     <div id="header">
       <h1>マイページ</h1>
       <!--氏名はDBより取得予定-->
-      <p id="user-name">id: <?= id ?></p>
+      <p id="user-name"><?= getUserName(id); ?>さん</p>
     </div>
     <div class="main">
       <div class="events">
