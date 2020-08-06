@@ -9,7 +9,7 @@
     <div id="header">
       <h1>マイページ</h1>
       <!--氏名はDBより取得予定-->
-      <p id="user-name">永和太郎さん</p>
+      <p id="user-name">id: <?= id ?></p>
     </div>
     <div class="main">
       <div class="events">
@@ -31,9 +31,9 @@
           </tr>
         </table>
       </div>
-      <button type="button">ログアウト</button>
+      <input type="button" onclick="location.href= '<?= getScriptUrl(1); ?>'" value="ログアウト">
     </div>
-    <a href="https://script.google.com/a/esm.co.jp/macros/s/AKfycbzqcWJrLSbYXf4DzqG3M4BjWXwD1LsfgsisAY5OcEyh/dev?p=login">ログアウト</a><br>
+    <a href=" <?= getScriptUrl(1); ?> ">ログアウト</a><br>
     <div id=" footer">採用サイト 2020 模擬開発
     </div>
   </div>
