@@ -37,3 +37,12 @@ function getScriptUrl(i) {
   const page = ["signup", "login", "mypage", "event"];
   return ScriptApp.getService().getUrl() + "?p=" + page[i];
 }
+
+function setJoin(id, col, value) {
+  for (let i = 2; i <= users.getLastRow(); i++) {
+    if (id == users.getRange(i, 1).getValue()) {
+      users.getRange(i, col).setValue(value);
+      return "処理を完了しました.";
+    }
+  }
+}

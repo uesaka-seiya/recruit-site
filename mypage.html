@@ -26,8 +26,8 @@
             <td><?= Utilities.formatDate(values[i][1], 'Asia/Tokyo', 'yyyy年MM月dd日'); ?></td>
             <td><?= values[i][0]; ?></td>
             <td>
-              <button type="button">申込</button>
-              <button type="button">キャンセル</button>
+              <button type="submit" id="join" value="<?= i + 4; ?>" onclick="join(this.value)">申込</button>
+              <button type="submit" id="cancel" value="<?= i + 4; ?>" onclick="cancel(this.value)">キャンセル</button>
             </td>
           </tr>
           <? } ?>
@@ -37,8 +37,33 @@
       <input type="button" onclick="location.href= '<?= getScriptUrl(1); ?>'" value="ログアウト">
     </div>
     <a href=" <?= getScriptUrl(1); ?> ">ログアウト</a><br>
-    <div id=" footer">採用サイト 2020 模擬開発
+    <div id="footer">採用サイト 2020 模擬開発
     </div>
   </div>
 </body>
+<script>
+  const userid = <?= id ?>;
+
+  function join(col) {
+    google.script.run
+      .withFailureHandler(onFailure)
+      .withSuccessHandler(onSuccess)
+      .setJoin(userid, col, "TRUE");
+  }
+
+  function cancel(col) {
+    google.script.run
+      .withFailureHandler(onFailure)
+      .withSuccessHandler(onSuccess)
+      .setJoin(userid, col, "FALSE");
+  }
+
+  function onSuccess(result) {
+    alert(result);
+  }
+
+  function onFailure(e) {
+    alert([e.message, e.stack]);
+  }
+</script>
 </html>
