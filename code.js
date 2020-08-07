@@ -1,17 +1,11 @@
 function doGet(e) {
-  var page = e.parameter["p"];
-  if (page == "login" || page == null) {
-    return HtmlService.createTemplateFromFile("login").evaluate();
-  } else if (page == "mypage") {
-    var template = HtmlService.createTemplateFromFile("mypage");
-    var id = e.parameter.id;
-    template.id = id;
-    return template.evaluate();
-  } else if (page == "event") {
-    return HtmlService.createTemplateFromFile("event").evaluate();
-  } else if (page == "signup") {
-    return HtmlService.createTemplateFromFile("signup").evaluate();
+  let page = e.parameter["p"];
+  if (page == null) {
+    page = "login";
   }
+  let template = HtmlService.createTemplateFromFile(page);
+  template.id = e.parameter.id;
+  return template.evaluate();
 }
 
 function include(file) {
