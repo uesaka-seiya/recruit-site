@@ -34,7 +34,6 @@ function getUserName(id) {
 }
 
 function getScriptUrl(i) {
-  const URL = ScriptApp.getService().getUrl();
-  const page = ["signup", "login", "mypage", "event",];
-  return URL + "?p=" + page[i];
+  const page = ["signup", "login", "mypage", "event"];
+  return ScriptApp.getService().getUrl() + "?p=" + page[i];
 }
