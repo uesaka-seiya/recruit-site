@@ -1,5 +1,5 @@
 const ss = SpreadsheetApp.getActiveSpreadsheet();
-const usersSheet = ss.getSheetByName("loginCheck");
+const users = ss.getSheetByName("loginCheck");
 
 function doGet(e) {
   let page = e.parameter["p"];
@@ -16,21 +16,19 @@ function include(file) {
     .createHtmlOutputFromFile(file).getContent();
 }
 
-function loginCheck_gs(loginId, loginPassword) {
-  for (let i = 2; i <= usersSheet.getLastRow(); i++) {
-    if (loginId === usersSheet.getRange(i, 1).getValue()) {
-      if (loginPassword === usersSheet.getRange(i, 2).getValue()) {
-        return getScriptUrl(2) + "&id=" + usersSheet.getRange(i, 1).getValue();
-      }
+function loginCheck_gs(id, password) {
+  for (let i = 2; i <= users.getLastRow(); i++) {
+    if (id === users.getRange(i, 1).getValue() && password === users.getRange(i, 2).getValue()) {
+      return getScriptUrl(2) + "&id=" + users.getRange(i, 1).getValue();
     }
   }
   throw "IDまたはパスワードが誤りです";
 }
 
 function getUserName(id) {
-  for (let i = 2; i <= usersSheet.getLastRow(); i++) {
-    if (id === usersSheet.getRange(i, 1).getValue()) {
-      return usersSheet.getRange(i, 3).getValue();
+  for (let i = 2; i <= users.getLastRow(); i++) {
+    if (id === users.getRange(i, 1).getValue()) {
+      return users.getRange(i, 3).getValue();
     }
   }
 }
