@@ -1,3 +1,6 @@
+const ss = SpreadsheetApp.getActiveSpreadsheet();
+const usersSheet = ss.getSheetByName("loginCheck");
+
 function doGet(e) {
   let page = e.parameter["p"];
   if (page == null) {
@@ -14,11 +17,10 @@ function include(file) {
 }
 
 function loginCheck_gs(loginId, loginPassword) {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("loginCheck");
-  for (let i = 2; i <= sheet.getLastRow(); i++) {
-    if (loginId === sheet.getRange(i, 1).getValue()) {
-      if (loginPassword === sheet.getRange(i, 2).getValue()) {
-        return getScriptUrl(2) + "&id=" + sheet.getRange(i, 1).getValue();
+  for (let i = 2; i <= usersSheet.getLastRow(); i++) {
+    if (loginId === usersSheet.getRange(i, 1).getValue()) {
+      if (loginPassword === usersSheet.getRange(i, 2).getValue()) {
+        return getScriptUrl(2) + "&id=" + usersSheet.getRange(i, 1).getValue();
       }
     }
   }
@@ -26,10 +28,9 @@ function loginCheck_gs(loginId, loginPassword) {
 }
 
 function getUserName(id) {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("loginCheck");
-  for (let i = 2; i <= sheet.getLastRow(); i++) {
-    if (id === sheet.getRange(i, 1).getValue()) {
-      return sheet.getRange(i, 3).getValue();
+  for (let i = 2; i <= usersSheet.getLastRow(); i++) {
+    if (id === usersSheet.getRange(i, 1).getValue()) {
+      return usersSheet.getRange(i, 3).getValue();
     }
   }
 }
