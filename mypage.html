@@ -8,7 +8,6 @@
   <div class="wrapper">
     <div id="header">
       <h1>マイページ</h1>
-      <!--氏名はDBより取得予定-->
       <p id="user-name"><?= getUserName(id); ?>さん</p>
     </div>
     <div class="main">
@@ -31,10 +30,10 @@
           </tr>
         </table>
       </div>
-      <input type="button" onclick="location.href= '<?= getScriptUrl(1); ?>'" value="ログアウト">
+      <button type="button">ログアウト</button>
     </div>
     <a href=" <?= getScriptUrl(1); ?> ">ログアウト</a><br>
-    <div id=" footer">採用サイト 2020 模擬開発
+    <div id="footer">採用サイト 2020 模擬開発
     </div>
   </div>
 </body>

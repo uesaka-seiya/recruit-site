@@ -31,7 +31,7 @@
     var password = document.getElementById("password").value;
     google.script.run
       .withFailureHandler(onFailure)
-      .withSuccessHandler(onSuccess)
+      .withSuccessHandler(jump)
       .loginCheck_gs(id, password);
   }
 
@@ -41,11 +41,6 @@
 
   function onFailure(e) {
     alert([e.message, e.stack]);
-  }
-
-  function onSuccess(result) {
-    alert(result);
-    jump(result);
   }
 
 </script>
