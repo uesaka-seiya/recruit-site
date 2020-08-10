@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <?!= include('css'); ?>
+</head>
+<body>
+  <div class="wrapper">
+    <div id="header">
+      <h1>マイページ</h1>
+      <p id="user-name"><?= getUserName(id); ?>さん</p>
+    </div>
+    <div class="main">
+      <div class="events">
+        <table>
+          <tr>
+            <th>日時</th>
+            <th>内容</th>
+            <th>申込状況</th>
+          </tr>
+          <tr>
+            <td>2020年8月3日</td>
+            <td>
+              <a href="https://script.google.com/a/esm.co.jp/macros/s/AKfycbzqcWJrLSbYXf4DzqG3M4BjWXwD1LsfgsisAY5OcEyh/dev?p=event">sampleEvent</a><br>
+            </td>
+            <td>
+              <button type="button">申込</button>
+              <button type="button">キャンセル</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <button type="button">ログアウト</button>
+    </div>
+    <a href=" <?= getScriptUrl(1); ?> ">ログアウト</a><br>
+    <div id="footer">採用サイト 2020 模擬開発
+    </div>
+  </div>
+</body>
+</html>
