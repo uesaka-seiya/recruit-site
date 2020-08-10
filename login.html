@@ -10,17 +10,38 @@
       <h1>ログイン画面</h1>
     </div>
     <div class="main">
-      <div class="input">
-        ID: <input type="txt" id="id" /><br>
-        PASS: <input type="txt" id="password" /><br><br>
-        <button type="button">ログイン</button>
-        <button type="button">新規登録<br>（エントリー）</button>
-      </div>
-      <a href="https://script.google.com/a/esm.co.jp/macros/s/AKfycbzqcWJrLSbYXf4DzqG3M4BjWXwD1LsfgsisAY5OcEyh/dev?p=mypage">mypage</a><br>
-      <a href="https://script.google.com/a/esm.co.jp/macros/s/AKfycbzqcWJrLSbYXf4DzqG3M4BjWXwD1LsfgsisAY5OcEyh/dev?p=signup">signup</a><br>
+      <form action="loginCheck()" method="post">
+        <label for="id">ID</label>
+        <input type="txt" id="id" placeholder="login-ID" /><br>
+        <label for="password">PASSWORD</label>
+        <input type="password" id="password" placeholder="password" required="true" /><br><br>
+        <button type="button" onclick="login()">ログイン</button>
+        <button type=" button">新規登録<br>（エントリー）</button>
+      </form>
+
+      <a href="<?= getScriptUrl(0); ?>">新規登録</a><br>
     </div>
-    <div id=" footer">採用サイト 2020 模擬開発
+    <div id="footer">採用サイト 2020 模擬開発
     </div>
   </div>
 </body>
+<script>
+  function login() {
+    var id = document.getElementById("id").value;
+    var password = document.getElementById("password").value;
+    google.script.run
+      .withFailureHandler(onFailure)
+      .withSuccessHandler(jump)
+      .loginCheck_gs(id, password);
+  }
+
+  function jump(url) {
+    window.top.location.href = url;
+  }
+
+  function onFailure(e) {
+    alert([e.message, e.stack]);
+  }
+
+</script>
 </html>
