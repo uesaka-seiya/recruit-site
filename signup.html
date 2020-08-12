@@ -10,20 +10,53 @@
       <h1>ユーザー登録</h1>
     </div>
     <div class="main">
-      <div class="input">
-        ID: <input type="txt" id="id" /><br>
-        PASS: <input type="txt" id="password" /><br>
-        氏名: <input type="txt" id="name" /><br>
-        住所: <input type="txt" id="address" /><br>
-        電話: <input type="txt" id="tel" /><br>
-        学校: <input type="txt" id="school" /><br>
-        <button type="button">登録</button>
-      </div>
-      <input type="button" onclick="location.href= '<?= getScriptUrl(1); ?>'" value="ログイン画面へ">
+      <form action="loginCheck()" method="post">
+        <label for="id">ID</label>
+        <input type="txt" id="id" placeholder="login-ID" /><br>
+        <label for="password">PASSWORD</label>
+        <input type="password" id="password" placeholder="password" required="true" /><br>
+        <label for="id">氏名</label>
+        <input type="txt" id="name" placeholder="氏名" /><br>
+        <label for="id">住所</label>
+        <input type="txt" id="address" placeholder="住所" /><br>
+        <label for="id">電話</label>
+        <input type="txt" id="tel" placeholder="電話" /><br>
+        <label for="id">学校名</label>
+        <input type="txt" id="school" placeholder="学校名" /><br><br>
+        <input type="button" value="登録" onclick="signUp()">
+      </form>
+      <input type="button" onclick="jump(<?= getScriptUrl(1); ?>)" value="ログイン画面へ">
     </div>
-    <a href="https://script.google.com/a/esm.co.jp/macros/s/AKfycbzqcWJrLSbYXf4DzqG3M4BjWXwD1LsfgsisAY5OcEyh/dev?p=login">ログイン画面へ</a><br>
   </div>
   <div id=" footer">採用サイト 2020 模擬開発
   </div>
 </body>
+<script>
+  function signUp() {
+    var userid = document.getElementById("id").value;
+    var password = document.getElementById("password").value;
+    var name = document.getElementById("name").value;
+    var address = document.getElementById("address").value;
+    var tel = document.getElementById("tel").value;
+    var school = document.getElementById("school").value;
+    google.script.run
+      .withFailureHandler(onFailure)
+      .withSuccessHandler(onSuccess)
+      .setUserData(userid, password, name, address, tel, school);
+  }
+
+  function onSuccess(result) {
+    window.top.location.href = result[0];
+    alert(result[1]);
+  }
+
+  function onFailure(e) {
+    alert([e.message, e.stack]);
+  }
+
+  function jump(url) {
+    window.top.location.href = url;
+  }
+
+</script>
 </html>
