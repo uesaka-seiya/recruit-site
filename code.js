@@ -16,6 +16,17 @@ function include(file) {
     .createHtmlOutputFromFile(file).getContent();
 }
 
+/**
+ * 新規ユーザー情報をDBに登録する
+ *
+ * @param {*} id
+ * @param {*} password
+ * @param {*} name
+ * @param {*} address
+ * @param {*} tel
+ * @param {*} school
+ * @throw 登録済みIDを入力しようとすると再入力を求める
+ */
 function setUserData(id, password, name, address, tel, school) {
   for (let i = 2; i <= usersSheet.getLastRow(); i++) {
     if (id == usersSheet.getRange(i, 1).getValue()) {
