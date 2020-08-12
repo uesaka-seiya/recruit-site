@@ -1,7 +1,8 @@
 const ss = SpreadsheetApp.getActiveSpreadsheet();
-const usersData = ss.getSheetByName("users");
-const eventData = ss.getSheetByName("events");
-const entryData = ss.getSheetByName("entry");
+const usersSheet = ss.getSheetByName("users");
+const eventsSheet = ss.getSheetByName("events");
+const entryStatusSheet = ss.getSheetByName("entry");
+const entryLastRow = entryStatusSheet.getLastRow();
 
 function doGet(e) {
   let page = e.parameter["p"];
@@ -9,7 +10,9 @@ function doGet(e) {
     page = "login";
   }
   let template = HtmlService.createTemplateFromFile(page);
-  template.id = e.parameter.id;
+  template.userId = e.parameter.id;
+  template.eventNum = eventsSheet.getLastRow() - 1;
+  template.eventValues = eventsSheet.getRange(2, 2, template.eventNum, 4).getValues();
   return template.evaluate();
 }
 
@@ -19,18 +22,18 @@ function include(file) {
 }
 
 function loginCheck_gs(id, password) {
-  for (let i = 2; i <= usersData.getLastRow(); i++) {
-    if (id === usersData.getRange(i, 1).getValue() && password === usersData.getRange(i, 2).getValue()) {
-      return getScriptUrl(2) + "&id=" + usersData.getRange(i, 1).getValue();
+  for (let i = 2; i <= usersSheet.getLastRow(); i++) {
+    if (id === usersSheet.getRange(i, 1).getValue() && password === usersSheet.getRange(i, 2).getValue()) {
+      return getScriptUrl(2) + "&id=" + usersSheet.getRange(i, 1).getValue();
     }
   }
   throw "IDまたはパスワードが誤りです";
 }
 
 function getUserName(id) {
-  for (let i = 2; i <= usersData.getLastRow(); i++) {
-    if (id === usersData.getRange(i, 1).getValue()) {
-      return usersData.getRange(i, 3).getValue();
+  for (let i = 2; i <= usersSheet.getLastRow(); i++) {
+    if (id === usersSheet.getRange(i, 1).getValue()) {
+      return usersSheet.getRange(i, 3).getValue();
     }
   }
 }
@@ -40,21 +43,32 @@ function getScriptUrl(i) {
   return ScriptApp.getService().getUrl() + "?p=" + page[i];
 }
 
+function getStatus(userId, eventId) {
+  var entryDisabled = false;
+  var cancelDisabled = true;
+  for (let i = 2; i <= entryLastRow; i++) {
+    if (userId == entryStatusSheet.getRange(i, 3).getValue() && eventId == entryStatusSheet.getRange(i, 2).getValue()) {
+      entryDisabled = true;
+      cancelDisabled = false;
+      break;
+    }
+  }
+  const disabledStatus = [eventId, entryDisabled, cancelDisabled];
+  return disabledStatus;
+}
+
 function setEntry(userId, eventId) {
-  const lastRow = entryData.getLastRow();
-  entryData.getRange(lastRow + 1, 1).setValue(new Date());
-  entryData.getRange(lastRow + 1, 2).setValue(eventId);
-  entryData.getRange(lastRow + 1, 3).setValue(userId);
-  const result = ["処理を完了しました", eventId];
-  return result;
+  entryStatusSheet.getRange(entryLastRow + 1, 1).setValue(new Date());
+  entryStatusSheet.getRange(entryLastRow + 1, 2).setValue(eventId);
+  entryStatusSheet.getRange(entryLastRow + 1, 3).setValue(userId);
+  return eventId;
 }
 
 function deleteEntry(userId, eventId) {
-  for (let i = 2; i <= entryData.getLastRow(); i++) {
-    if (userId == entryData.getRange(i, 3).getValue() && eventId == entryData.getRange(i, 2).getValue()) {
-      entryData.deleteRows(i);
+  for (let i = 2; i <= entryLastRow; i++) {
+    if (userId == entryStatusSheet.getRange(i, 3).getValue() && eventId == entryStatusSheet.getRange(i, 2).getValue()) {
+      entryStatusSheet.deleteRows(i);
     }
   }
-  const result = ["キャンセルしました", eventId];
-  return result;
+  return eventId;
 }

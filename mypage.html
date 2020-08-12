@@ -8,7 +8,7 @@
   <div class="wrapper">
     <div id="header">
       <h1>マイページ</h1>
-      <p id="user-name"><?= getUserName(id); ?>さん</p>
+      <p id="user-name"><?= getUserName(userId); ?>さん</p>
     </div>
     <div class="main">
       <div class="events">
@@ -18,15 +18,11 @@
             <th>内容</th>
             <th>申込状況</th>
           </tr>
-          <? const events = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("events"); ?>
-          <? lastRow = events.getLastRow(); ?>
-          <? const values = events.getRange(2, 2, lastRow -1, 4).getValues(); ?>
-          <? for (var i = 0; i < lastRow - 1 ; i++) { ?>
-          <? events.getRange(i+1,7).setValue(i); ?>
+          <? for (var i = 0; i < eventNum ; i++) { ?>
           <tr>
-            <td><?= Utilities.formatDate(values[i][1], 'Asia/Tokyo', 'yyyy年MM月dd日'); ?>
+            <td><?= Utilities.formatDate(eventValues[i][1], 'Asia/Tokyo', 'yyyy年MM月dd日'); ?>
             </td>
-            <td><?= values[i][0]; ?></td>
+            <td><?= eventValues[i][0]; ?></td>
             <td>
               <button type="submit" id="<?= 'entry' + String(i); ?>" value="<?= i; ?>" onclick="entry(this.value)">申込</button>
               <button type="submit" id="<?= 'cancel' + String(i); ?>" value="<?= i; ?>" onclick="cancel(this.value)">キャンセル</button>
@@ -36,7 +32,7 @@
           <tr></tr>
         </table>
       </div>
-      <input type="button" onclick="location.href= '<?= getScriptUrl(1); ?>'" value="ログアウト">
+      <input type="submit" onclick="location.href= '<?= getScriptUrl(1); ?>'" value="ログアウト">
     </div>
     <a href=" <?= getScriptUrl(1); ?> ">ログアウト</a><br>
     <div id="footer">採用サイト 2020 模擬開発
@@ -44,49 +40,52 @@
   </div>
 </body>
 <script>
-  const userid = <?= id ?>;
+  const userId = <?= userId ?>;
+  const eventValues = <?= eventValues ?>;
+  const eventNum = <?= eventNum ?>;
 
-  function entry(eventId) {
-    alert(eventId);
-    google.script.run
-      .withFailureHandler(onFailure)
-      .withSuccessHandler(onEntrySuccess)
-      .setEntry(userid, eventId);
+  window.onload = function () {
+    for (i = 0; i < eventNum; i++) {
+      google.script.run
+        .withFailureHandler(onFailure)
+        .withSuccessHandler(onSuccess)
+        .getStatus(userId, i);
+    }
+  };
+
+  function onSuccess(result) {
+    document.getElementById("entry" + String(result[0])).disabled = result[1];
+    document.getElementById("cancel" + String(result[0])).disabled = result[2];
   }
 
-  function onEntrySuccess(result) {
-    alert(result[0]);
-    onEntry(result[1]);
+  function entry(eventId) {
+    google.script.run
+      .withFailureHandler(onFailure)
+      .withSuccessHandler(onEntry)
+      .setEntry(userId, eventId);
   }
 
   function onEntry(eventId) {
     document.getElementById("entry" + String(eventId)).disabled = true;
-    cocument.getElementById("cancel" + String(eventId)).disabled = false;
+    document.getElementById("cancel" + String(eventId)).disabled = false;
+    alert("処理を完了しました");
   }
 
   function cancel(eventId) {
-    alert(eventId);
     google.script.run
       .withFailureHandler(onFailure)
-      .withSuccessHandler(onDeleteSuccess)
-      .deleteEntry(userid, eventId);
+      .withSuccessHandler(onNoShow)
+      .deleteEntry(userId, eventId);
   }
 
-  function onDeleteSuccess(result) {
-    alert(result[1]);
-    onNoShow(reult[1]);
-  }
   function onNoShow(eventId) {
+    alert("キャンセルしました");
     document.getElementById("entry" + String(eventId)).disabled = false;
-    cocument.getElementById("cancel" + String(eventId)).disabled = true;
+    document.getElementById("cancel" + String(eventId)).disabled = true;
   }
 
   function onFailure(e) {
     alert([e.message, e.stack]);
-  }
-
-  function alertTest(value) {
-    alert(value);
   }
 </script>
 </html>
