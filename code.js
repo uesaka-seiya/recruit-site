@@ -19,7 +19,7 @@ function include(file) {
 /**
  * 新規ユーザー情報をDBに登録する
  *
- * @param {*} id
+ * @param {*} userid
  * @param {*} password
  * @param {*} name
  * @param {*} address
@@ -27,15 +27,15 @@ function include(file) {
  * @param {*} school
  * @throw 登録済みIDを入力しようとすると再入力を求める
  */
-function setUserData(id, password, name, address, tel, school) {
+function setUserData(userid, password, name, address, tel, school) {
   for (let i = 2; i <= usersSheet.getLastRow(); i++) {
-    if (id == usersSheet.getRange(i, 1).getValue()) {
+    if (userid == usersSheet.getRange(i, 1).getValue()) {
       throw "このIDはすでに使われています。別のIDを再入力してください。";
     } else {
-      const user = [[id, password, name, address, tel, school]];
+      const user = [[userid, password, name, address, tel, school]];
       usersSheet.getRange(usersSheet.getLastRow() + 1, 1, 1, 6).setValues(user);
       console.log(usersSheet.getRange(1, usersSheet.getLastRow(), 1, 6).getValues());
-      return getScriptUrl(2) + "&id=" + id;
+      return getScriptUrl(2) + "&id=" + userid;
     }
   }
 }
