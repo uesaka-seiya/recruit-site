@@ -13,7 +13,7 @@
       <form action="loginCheck()" method="post">
         <label for="id">ID</label>
         <input type="txt" id="id" placeholder="login-ID" /><br>
-        <label for="password">PASSWORD</label>
+        <label for="password">PASS</label>
         <input type="password" id="password" placeholder="password" required="true" /><br>
         <label for="id">氏名</label>
         <input type="txt" id="name" placeholder="氏名" /><br>
@@ -28,7 +28,7 @@
       <input type="button" onclick="jump(<?= getScriptUrl(1); ?>)" value="ログイン画面へ">
     </div>
   </div>
-  <div id=" footer">採用サイト 2020 模擬開発
+  <div id="footer">採用サイト 2020 模擬開発
   </div>
 </body>
 <script>
@@ -45,9 +45,9 @@
       .setUserData(userid, password, name, address, tel, school);
   }
 
-  function onSuccess(result) {
-    window.top.location.href = result[0];
-    alert(result[1]);
+  function onSuccess(url) {
+    jump(url);
+    alert("登録が完了しました");
   }
 
   function onFailure(e) {
@@ -57,6 +57,5 @@
   function jump(url) {
     window.top.location.href = url;
   }
-
 </script>
 </html>

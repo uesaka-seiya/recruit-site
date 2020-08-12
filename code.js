@@ -24,8 +24,7 @@ function setUserData(id, password, name, address, tel, school) {
       const user = [[id, password, name, address, tel, school]];
       usersSheet.getRange(usersSheet.getLastRow() + 1, 1, 1, 6).setValues(user);
       console.log(usersSheet.getRange(1, usersSheet.getLastRow(), 1, 6).getValues());
-      const result = [getScriptUrl(2) + "&id=" + id, "登録が完了しました"];
-      return (result);
+      return getScriptUrl(2) + "&id=" + id;
     }
   }
 }
