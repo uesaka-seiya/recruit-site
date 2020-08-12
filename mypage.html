@@ -21,13 +21,15 @@
           <? const events = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("events"); ?>
           <? lastRow = events.getLastRow(); ?>
           <? const values = events.getRange(2, 2, lastRow -1, 4).getValues(); ?>
-          <? for (let i = 0; i < lastRow-1 ; i++) { ?>
+          <? for (var i = 0; i < lastRow - 1 ; i++) { ?>
+          <? events.getRange(i+1,7).setValue(i); ?>
           <tr>
-            <td><?= Utilities.formatDate(values[i][1], 'Asia/Tokyo', 'yyyy年MM月dd日'); ?></td>
+            <td><?= Utilities.formatDate(values[i][1], 'Asia/Tokyo', 'yyyy年MM月dd日'); ?>
+            </td>
             <td><?= values[i][0]; ?></td>
             <td>
-              <button type="submit" id="join" value="<?= i + 4; ?>" onclick="join(this.value)">申込</button>
-              <button type="submit" id="cancel" value="<?= i + 4; ?>" onclick="cancel(this.value)">キャンセル</button>
+              <button type="submit" id="<?= 'entry' + String(i); ?>" value="<?= i; ?>" onclick="entry(this.value)">申込</button>
+              <button type="submit" id="<?= 'cancel' + String(i); ?>" value="<?= i; ?>" onclick="cancel(this.value)">キャンセル</button>
             </td>
           </tr>
           <? } ?>
@@ -44,26 +46,47 @@
 <script>
   const userid = <?= id ?>;
 
-  function join(col) {
+  function entry(eventId) {
+    alert(eventId);
     google.script.run
       .withFailureHandler(onFailure)
-      .withSuccessHandler(onSuccess)
-      .setJoin(userid, col, "TRUE");
+      .withSuccessHandler(onEntrySuccess)
+      .setEntry(userid, eventId);
   }
 
-  function cancel(col) {
+  function onEntrySuccess(result) {
+    alert(result[0]);
+    onEntry(result[1]);
+  }
+
+  function onEntry(eventId) {
+    document.getElementById("entry" + String(eventId)).disabled = true;
+    cocument.getElementById("cancel" + String(eventId)).disabled = false;
+  }
+
+  function cancel(eventId) {
+    alert(eventId);
     google.script.run
       .withFailureHandler(onFailure)
-      .withSuccessHandler(onSuccess)
-      .setJoin(userid, col, "FALSE");
+      .withSuccessHandler(onDeleteSuccess)
+      .deleteEntry(userid, eventId);
   }
 
-  function onSuccess(result) {
-    alert(result);
+  function onDeleteSuccess(result) {
+    alert(result[1]);
+    onNoShow(reult[1]);
+  }
+  function onNoShow(eventId) {
+    document.getElementById("entry" + String(eventId)).disabled = false;
+    cocument.getElementById("cancel" + String(eventId)).disabled = true;
   }
 
   function onFailure(e) {
     alert([e.message, e.stack]);
+  }
+
+  function alertTest(value) {
+    alert(value);
   }
 </script>
 </html>

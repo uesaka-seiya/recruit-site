@@ -1,5 +1,7 @@
 const ss = SpreadsheetApp.getActiveSpreadsheet();
-const users = ss.getSheetByName("loginCheck");
+const usersData = ss.getSheetByName("users");
+const eventData = ss.getSheetByName("events");
+const entryData = ss.getSheetByName("entry");
 
 function doGet(e) {
   let page = e.parameter["p"];
@@ -17,18 +19,18 @@ function include(file) {
 }
 
 function loginCheck_gs(id, password) {
-  for (let i = 2; i <= users.getLastRow(); i++) {
-    if (id === users.getRange(i, 1).getValue() && password === users.getRange(i, 2).getValue()) {
-      return getScriptUrl(2) + "&id=" + users.getRange(i, 1).getValue();
+  for (let i = 2; i <= usersData.getLastRow(); i++) {
+    if (id === usersData.getRange(i, 1).getValue() && password === usersData.getRange(i, 2).getValue()) {
+      return getScriptUrl(2) + "&id=" + usersData.getRange(i, 1).getValue();
     }
   }
   throw "IDまたはパスワードが誤りです";
 }
 
 function getUserName(id) {
-  for (let i = 2; i <= users.getLastRow(); i++) {
-    if (id === users.getRange(i, 1).getValue()) {
-      return users.getRange(i, 3).getValue();
+  for (let i = 2; i <= usersData.getLastRow(); i++) {
+    if (id === usersData.getRange(i, 1).getValue()) {
+      return usersData.getRange(i, 3).getValue();
     }
   }
 }
@@ -38,11 +40,21 @@ function getScriptUrl(i) {
   return ScriptApp.getService().getUrl() + "?p=" + page[i];
 }
 
-function setJoin(id, col, value) {
-  for (let i = 2; i <= users.getLastRow(); i++) {
-    if (id == users.getRange(i, 1).getValue()) {
-      users.getRange(i, col).setValue(value);
-      return "処理を完了しました.";
+function setEntry(userId, eventId) {
+  const lastRow = entryData.getLastRow();
+  entryData.getRange(lastRow + 1, 1).setValue(new Date());
+  entryData.getRange(lastRow + 1, 2).setValue(eventId);
+  entryData.getRange(lastRow + 1, 3).setValue(userId);
+  const result = ["処理を完了しました", eventId];
+  return result;
+}
+
+function deleteEntry(userId, eventId) {
+  for (let i = 2; i <= entryData.getLastRow(); i++) {
+    if (userId == entryData.getRange(i, 3).getValue() && eventId == entryData.getRange(i, 2).getValue()) {
+      entryData.deleteRows(i);
     }
   }
+  const result = ["キャンセルしました", eventId];
+  return result;
 }
