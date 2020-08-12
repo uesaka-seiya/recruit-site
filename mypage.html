@@ -44,6 +44,7 @@
   const eventValues = <?= eventValues ?>;
   const eventNum = <?= eventNum ?>;
 
+  // 申込/キャンセルボタンの初期設定
   window.onload = function () {
     for (i = 0; i < eventNum; i++) {
       google.script.run
@@ -58,6 +59,7 @@
     document.getElementById("cancel" + String(result[0])).disabled = result[2];
   }
 
+  // 申込ボタンを押下するとDBを更新して各ボタンを活性/非活性化する
   function entry(eventId) {
     google.script.run
       .withFailureHandler(onFailure)
@@ -71,6 +73,7 @@
     alert("処理を完了しました");
   }
 
+  // キャンセルボタンを押下するとDBからレコードを削除して各ボタンを活性/非活性化する
   function cancel(eventId) {
     google.script.run
       .withFailureHandler(onFailure)
