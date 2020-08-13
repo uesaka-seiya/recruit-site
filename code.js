@@ -12,6 +12,7 @@ function doGet(e) {
   }
   let template = HtmlService.createTemplateFromFile(page);
   template.userId = e.parameter.id;
+  template.eventId = e.parameter.ev;
   template.eventNum = eventsSheet.getLastRow() - 1;
   template.eventValues = eventsSheet.getRange(2, 2, template.eventNum, 4).getValues();
   return template.evaluate();
