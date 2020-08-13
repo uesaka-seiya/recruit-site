@@ -10,6 +10,10 @@
       <h1>ユーザー登録</h1>
     </div>
     <div class="main">
+      <p>すべての項目を入力してください。<br>
+        前後に入力されたスペースは無視されます。<br>
+        そのうちconfirmで確認ダイアログ（はい・いいえ）出したいです。
+      </p>
       <form action="loginCheck()" method="post">
         <label for="id">ID</label>
         <input type="txt" id="id" placeholder="login-ID" /><br>
@@ -33,12 +37,18 @@
 </body>
 <script>
   function signUp() {
-    var userid = document.getElementById("id").value;
-    var password = document.getElementById("password").value;
-    var name = document.getElementById("name").value;
-    var address = document.getElementById("address").value;
-    var tel = document.getElementById("tel").value;
-    var school = document.getElementById("school").value;
+    // とりあえず前後に連続する空白はtrim()で削除して登録しています
+    // のちほど使用可能な文字かどうか判定させたいです
+    const userid = document.getElementById("id").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const name = document.getElementById("name").value.trim();
+    const address = document.getElementById("address").value.trim();
+    const tel = document.getElementById("tel").value.trim();
+    const school = document.getElementById("school").value.trim();
+    if (userid.length === 0 | password.length === 0 | name.length === 0 | address.length === 0 | tel.length === 0 | school.length === 0) {
+      alert("未入力の項目があります");
+      return;
+    }
     google.script.run
       .withFailureHandler(onFailure)
       .withSuccessHandler(onSuccess)
