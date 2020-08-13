@@ -40,7 +40,6 @@ function setUserData(userid, password, name, address, tel, school) {
     } else {
       const user = [[userid, password, name, address, tel, school]];
       usersSheet.getRange(usersSheet.getLastRow() + 1, 1, 1, 6).setValues(user);
-      console.log(usersSheet.getRange(1, usersSheet.getLastRow(), 1, 6).getValues());
       return getLoggedInUrl(userid);
     }
   }
@@ -94,7 +93,7 @@ function getScriptUrl(i) {
  * @return ユーザーのマイページURL
  */
 function getLoggedInUrl(userId) {
-  return getScriptUrl(2) + + "&id=" + userId;
+  return getScriptUrl(2) + '&id=' + userId;
 }
 
 /**
