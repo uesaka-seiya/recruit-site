@@ -3,7 +3,7 @@ const usersSheet = ss.getSheetByName("users");
 const eventsSheet = ss.getSheetByName("events");
 const entryStatusSheet = ss.getSheetByName("entry");
 const entryLastRow = entryStatusSheet.getLastRow();
-const entryStatusValues = entryStatusSheet.getRange(2, 2, entryLastRow - 1, 2).getValues();
+const entryStatusValues = entryStatusSheet.getRange(2, 2, entryLastRow, 2).getValues();
 
 function doGet(e) {
   let page = e.parameter["p"];
@@ -105,7 +105,7 @@ function setEntry(userId, eventId) {
 function deleteEntry(userId, eventId) {
   for (let i = 0; i < entryLastRow - 1; i++) {
     if (userId == entryStatusValues[i][1] && eventId == entryStatusValues[i][0]) {
-      entryStatusSheet.deleteRows(i);
+      entryStatusSheet.deleteRows(i + 2);
     }
   }
   return eventId;
