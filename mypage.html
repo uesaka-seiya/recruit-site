@@ -32,9 +32,8 @@
           <tr></tr>
         </table>
       </div>
-      <input type="submit" onclick="location.href= <?= getScriptUrl(1); ?>" value="ログアウト">
+      <input type="submit" onclick="jump(<?= getScriptUrl(1); ?>)" value="ログアウト">
     </div>
-    <a href=<?= getScriptUrl(1); ?>>ログアウト</a><br>
     <div id="footer">採用サイト 2020 模擬開発
     </div>
   </div>
@@ -89,6 +88,10 @@
 
   function onFailure(e) {
     alert([e.message, e.stack]);
+  }
+
+  function jump(url) {
+    window.top.location.href = url;
   }
 </script>
 </html>

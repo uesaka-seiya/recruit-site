@@ -16,10 +16,8 @@
         <label for="password">PASSWORD</label>
         <input type="password" id="password" placeholder="password" required="true" /><br><br>
         <button type="button" onclick="login()">ログイン</button>
-        <button type=" button">新規登録<br>（エントリー）</button>
       </form>
-
-      <a href="<?= getScriptUrl(0); ?>">新規登録</a><br>
+      <button type=" button" onclick="jump(<?= getScriptUrl(0); ?>)">新規登録<br>（エントリー）</button>
     </div>
     <div id="footer">採用サイト 2020 模擬開発
     </div>
