@@ -22,7 +22,7 @@
           <tr>
             <td><?= Utilities.formatDate(eventValues[i][1], 'Asia/Tokyo', 'yyyy年MM月dd日'); ?>
             </td>
-            <td><a href="<?= getScriptUrl(3) + '&id=' + userId + '&ev=' + i; ?>"><?= eventValues[i][0]; ?></a></td>
+            <td><a href="<?= getLoggedInUrl(userId) + '&ev=' + i; ?>"><?= eventValues[i][0]; ?></a></td>
             <td>
               <button type="submit" id="<?= 'entry' + String(i); ?>" value="<?= i; ?>" onclick="entry(this.value)">申込</button>
               <button type="submit" id="<?= 'cancel' + String(i); ?>" value="<?= i; ?>" onclick="cancel(this.value)">キャンセル</button>
