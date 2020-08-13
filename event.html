@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <?!= include('css'); ?>
+</head>
+<body>
+  <div class="wrapper">
+    <div id="header">
+      <h1>イベント詳細</h1>
+      <p id="user-name"><?= getUserName(userId); ?>さん</p>
+    </div>
+    <div class="main">
+      <div class="events">
+        <table>
+          <tr>
+            <th>イベント名</th>
+            <td></td>
+          </tr>
+          <tr>
+            <th>実施日</th>
+            <td>sampleDate</td>
+          </tr>
+          <tr>
+            <th>詳細</th>
+            <td>sampleText</td>
+          </tr>
+          <tr>
+            <th>申込期限</th>
+            <td>sampleDate</td>
+          </tr>
+          <? for (var i = 0; i < eventNum ; i++) { ?>
+          <tr>
+            <td><?= Utilities.formatDate(eventValues[i][1], 'Asia/Tokyo', 'yyyy年MM月dd日'); ?>
+            </td>
+            <td><?= eventValues[i][0]; ?></td>
+            <td>
+              <button type="submit" id="<?= 'entry' + String(i); ?>" value="<?= i; ?>" onclick="entry(this.value)">申込</button>
+              <button type="submit" id="<?= 'cancel' + String(i); ?>" value="<?= i; ?>" onclick="cancel(this.value)">キャンセル</button>
+            </td>
+          </tr>
+          <? } ?>
+          <tr></tr>
+        </table>
+      </div>
+      <input type="submit" onclick="jump(<?= getScriptUrl(1); ?>)" value="ログアウト">
+    </div>
+    <div id="footer">採用サイト 2020 模擬開発
+    </div>
+  </div>
+</body>
+<script>
+  const userId = <?= userId ?>;
+  const eventValues = <?= eventValues ?>;
+  const eventNum = <?= eventNum ?>;
+
+  // 申込/キャンセルボタンの初期設定
+  window.onload = function () {
+    for (let i = 0; i < eventNum; i++) {
+      google.script.run
+        .withFailureHandler(onFailure)
+        .withSuccessHandler(onSuccess)
+        .getStatus(userId, i);
+    }
+  };
+
+  function onSuccess(result) {
+    document.getElementById("entry" + String(result[0])).disabled = result[1];
+    document.getElementById("cancel" + String(result[0])).disabled = result[2];
+  }
+
+  // 申込ボタンを押下するとDBを更新して各ボタンを活性/非活性化する
+  function entry(eventId) {
+    google.script.run
+      .withFailureHandler(onFailure)
+      .withSuccessHandler(onEntry)
+      .setEntry(userId, eventId);
+  }
+
+  function onEntry(eventId) {
+    document.getElementById("entry" + String(eventId)).disabled = true;
+    document.getElementById("cancel" + String(eventId)).disabled = false;
+    alert("処理を完了しました");
+  }
+
+  // キャンセルボタンを押下するとDBからレコードを削除して各ボタンを活性/非活性化する
+  function cancel(eventId) {
+    google.script.run
+      .withFailureHandler(onFailure)
+      .withSuccessHandler(onNoShow)
+      .deleteEntry(userId, eventId);
+  }
+
+  function onNoShow(eventId) {
+    document.getElementById("entry" + String(eventId)).disabled = false;
+    document.getElementById("cancel" + String(eventId)).disabled = true;
+    alert("キャンセルしました");
+  }
+
+  function onFailure(e) {
+    alert([e.message, e.stack]);
+  }
+
+  function jump(url) {
+    window.top.location.href = url;
+  }
+</script>
+</html>
