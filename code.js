@@ -41,7 +41,7 @@ function setUserData(userid, password, name, address, tel, school) {
       const user = [[userid, password, name, address, tel, school]];
       usersSheet.getRange(usersSheet.getLastRow() + 1, 1, 1, 6).setValues(user);
       console.log(usersSheet.getRange(1, usersSheet.getLastRow(), 1, 6).getValues());
-      return getScriptUrl(2) + "&id=" + userid;
+      return getLoggedInUrl(userid);
     }
   }
 }
@@ -57,7 +57,7 @@ function setUserData(userid, password, name, address, tel, school) {
 function loginCheck_gs(id, password) {
   for (i = 2; i <= usersSheet.getLastRow(); i++) {
     if (id === usersSheet.getRange(i, 1).getValue() && password === usersSheet.getRange(i, 2).getValue()) {
-      return getScriptUrl(2) + "&id=" + usersSheet.getRange(i, 1).getValue();
+      return getLoggedInUrl(id);
     }
   }
   throw "IDまたはパスワードが誤りです";
@@ -85,6 +85,16 @@ function getUserName(id) {
 function getScriptUrl(i) {
   const page = ["signup", "login", "mypage", "event"];
   return ScriptApp.getService().getUrl() + "?p=" + page[i];
+}
+
+/**
+ * マイページのURLをuserIdパラメータつきで返す
+ *
+ * @param {*} userId
+ * @return ユーザーのマイページURL
+ */
+function getLoggedInUrl(userId) {
+  return getScriptUrl(2) + + "&id=" + userId;
 }
 
 /**
