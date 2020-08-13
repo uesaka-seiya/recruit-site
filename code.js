@@ -3,6 +3,7 @@ const usersSheet = ss.getSheetByName("users");
 const eventsSheet = ss.getSheetByName("events");
 const entryStatusSheet = ss.getSheetByName("entry");
 const entryLastRow = entryStatusSheet.getLastRow();
+const entryStatusValues = entryStatusSheet.getRange(2, 2, entryLastRow - 1, 2).getValues();
 
 function doGet(e) {
   let page = e.parameter["p"];
@@ -30,7 +31,7 @@ function include(file) {
  * @throws IDとパスワードが一致しないときにメッセージを投げる
  */
 function loginCheck_gs(id, password) {
-  for (let i = 2; i <= usersSheet.getLastRow(); i++) {
+  for (i = 2; i <= usersSheet.getLastRow(); i++) {
     if (id === usersSheet.getRange(i, 1).getValue() && password === usersSheet.getRange(i, 2).getValue()) {
       return getScriptUrl(2) + "&id=" + usersSheet.getRange(i, 1).getValue();
     }
@@ -71,8 +72,8 @@ function getScriptUrl(i) {
 function getStatus(userId, eventId) {
   var entryDisabled = false;
   var cancelDisabled = true;
-  for (let i = 2; i <= entryLastRow; i++) {
-    if (userId == entryStatusSheet.getRange(i, 3).getValue() && eventId == entryStatusSheet.getRange(i, 2).getValue()) {
+  for (let i = 0; i < entryLastRow - 1; i++) {
+    if (userId == entryStatusValues[i][1] && eventId == entryStatusValues[i][0]) {
       entryDisabled = true;
       cancelDisabled = false;
       break;
@@ -90,9 +91,7 @@ function getStatus(userId, eventId) {
  * @return 押されたボタンが配置されている行番号（ボタンのidと同値）
  */
 function setEntry(userId, eventId) {
-  entryStatusSheet.getRange(entryLastRow + 1, 1).setValue(new Date());
-  entryStatusSheet.getRange(entryLastRow + 1, 2).setValue(eventId);
-  entryStatusSheet.getRange(entryLastRow + 1, 3).setValue(userId);
+  entryStatusSheet.getRange(entryLastRow + 1, 1, 1, 3).setValues([[new Date(), eventId, userId]]);
   return eventId;
 }
 
@@ -104,8 +103,8 @@ function setEntry(userId, eventId) {
  * @return 押されたボタンが配置されている行番号（ボタンのidと同値）
  */
 function deleteEntry(userId, eventId) {
-  for (let i = 2; i <= entryLastRow; i++) {
-    if (userId == entryStatusSheet.getRange(i, 3).getValue() && eventId == entryStatusSheet.getRange(i, 2).getValue()) {
+  for (let i = 0; i < entryLastRow - 1; i++) {
+    if (userId == entryStatusValues[i][1] && eventId == entryStatusValues[i][0]) {
       entryStatusSheet.deleteRows(i);
     }
   }

@@ -32,9 +32,9 @@
           <tr></tr>
         </table>
       </div>
-      <input type="submit" onclick="location.href= '<?= getScriptUrl(1); ?>'" value="ログアウト">
+      <input type="submit" onclick="location.href= <?= getScriptUrl(1); ?>" value="ログアウト">
     </div>
-    <a href=" <?= getScriptUrl(1); ?> ">ログアウト</a><br>
+    <a href=<?= getScriptUrl(1); ?>>ログアウト</a><br>
     <div id="footer">採用サイト 2020 模擬開発
     </div>
   </div>
@@ -46,7 +46,7 @@
 
   // 申込/キャンセルボタンの初期設定
   window.onload = function () {
-    for (i = 0; i < eventNum; i++) {
+    for (let i = 0; i < eventNum; i++) {
       google.script.run
         .withFailureHandler(onFailure)
         .withSuccessHandler(onSuccess)
@@ -82,9 +82,9 @@
   }
 
   function onNoShow(eventId) {
-    alert("キャンセルしました");
     document.getElementById("entry" + String(eventId)).disabled = false;
     document.getElementById("cancel" + String(eventId)).disabled = true;
+    alert("キャンセルしました");
   }
 
   function onFailure(e) {
