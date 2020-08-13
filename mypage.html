@@ -8,7 +8,7 @@
   <div class="wrapper">
     <div id="header">
       <h1>マイページ</h1>
-      <p id="user-name"><?= getUserName(id); ?>さん</p>
+      <p id="user-name"><?= getUserName(userId); ?>さん</p>
     </div>
     <div class="main">
       <div class="events">
@@ -18,23 +18,80 @@
             <th>内容</th>
             <th>申込状況</th>
           </tr>
+          <? for (var i = 0; i < eventNum ; i++) { ?>
           <tr>
-            <td>2020年8月3日</td>
-            <td>
-              <a href="https://script.google.com/a/esm.co.jp/macros/s/AKfycbzqcWJrLSbYXf4DzqG3M4BjWXwD1LsfgsisAY5OcEyh/dev?p=event">sampleEvent</a><br>
+            <td><?= Utilities.formatDate(eventValues[i][1], 'Asia/Tokyo', 'yyyy年MM月dd日'); ?>
             </td>
+            <td><?= eventValues[i][0]; ?></td>
             <td>
-              <button type="button">申込</button>
-              <button type="button">キャンセル</button>
+              <button type="submit" id="<?= 'entry' + String(i); ?>" value="<?= i; ?>" onclick="entry(this.value)">申込</button>
+              <button type="submit" id="<?= 'cancel' + String(i); ?>" value="<?= i; ?>" onclick="cancel(this.value)">キャンセル</button>
             </td>
           </tr>
+          <? } ?>
+          <tr></tr>
         </table>
       </div>
-      <button type="button">ログアウト</button>
+      <input type="submit" onclick="jump(<?= getScriptUrl(1); ?>)" value="ログアウト">
     </div>
-    <a href=" <?= getScriptUrl(1); ?> ">ログアウト</a><br>
     <div id="footer">採用サイト 2020 模擬開発
     </div>
   </div>
 </body>
+<script>
+  const userId = <?= userId ?>;
+  const eventValues = <?= eventValues ?>;
+  const eventNum = <?= eventNum ?>;
+
+  // 申込/キャンセルボタンの初期設定
+  window.onload = function () {
+    for (let i = 0; i < eventNum; i++) {
+      google.script.run
+        .withFailureHandler(onFailure)
+        .withSuccessHandler(onSuccess)
+        .getStatus(userId, i);
+    }
+  };
+
+  function onSuccess(result) {
+    document.getElementById("entry" + String(result[0])).disabled = result[1];
+    document.getElementById("cancel" + String(result[0])).disabled = result[2];
+  }
+
+  // 申込ボタンを押下するとDBを更新して各ボタンを活性/非活性化する
+  function entry(eventId) {
+    google.script.run
+      .withFailureHandler(onFailure)
+      .withSuccessHandler(onEntry)
+      .setEntry(userId, eventId);
+  }
+
+  function onEntry(eventId) {
+    document.getElementById("entry" + String(eventId)).disabled = true;
+    document.getElementById("cancel" + String(eventId)).disabled = false;
+    alert("処理を完了しました");
+  }
+
+  // キャンセルボタンを押下するとDBからレコードを削除して各ボタンを活性/非活性化する
+  function cancel(eventId) {
+    google.script.run
+      .withFailureHandler(onFailure)
+      .withSuccessHandler(onNoShow)
+      .deleteEntry(userId, eventId);
+  }
+
+  function onNoShow(eventId) {
+    document.getElementById("entry" + String(eventId)).disabled = false;
+    document.getElementById("cancel" + String(eventId)).disabled = true;
+    alert("キャンセルしました");
+  }
+
+  function onFailure(e) {
+    alert([e.message, e.stack]);
+  }
+
+  function jump(url) {
+    window.top.location.href = url;
+  }
+</script>
 </html>
