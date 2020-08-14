@@ -43,7 +43,7 @@
   const eventValues = <?= eventValues ?>;
   const eventNum = <?= eventNum ?>;
 
-  // 申込/キャンセルボタンの初期設定
+  // 申込・キャンセルボタンの初期設定
   window.onload = function () {
     for (let i = 0; i < eventNum; i++) {
       google.script.run
@@ -53,37 +53,29 @@
     }
   };
 
+  // ボタンのdisabled属性を指定し必要に応じてアラートを出す
   function onSuccess(result) {
     document.getElementById("entry" + String(result[0])).disabled = result[1];
     document.getElementById("cancel" + String(result[0])).disabled = result[2];
+    if (result[3] != undefined) {
+      alert(result[3]);
+    }
   }
 
-  // 申込ボタンを押下するとDBを更新して各ボタンを活性/非活性化する
+  // 申込ボタンを押下したとき
   function entry(eventId) {
     google.script.run
       .withFailureHandler(onFailure)
-      .withSuccessHandler(onEntry)
+      .withSuccessHandler(onSuccess)
       .setEntry(userId, eventId);
   }
 
-  function onEntry(eventId) {
-    document.getElementById("entry" + String(eventId)).disabled = true;
-    document.getElementById("cancel" + String(eventId)).disabled = false;
-    alert("処理を完了しました");
-  }
-
-  // キャンセルボタンを押下するとDBからレコードを削除して各ボタンを活性/非活性化する
+  // キャンセルボタンを押下したとき
   function cancel(eventId) {
     google.script.run
       .withFailureHandler(onFailure)
-      .withSuccessHandler(onNoShow)
+      .withSuccessHandler(onSuccess)
       .deleteEntry(userId, eventId);
-  }
-
-  function onNoShow(eventId) {
-    document.getElementById("entry" + String(eventId)).disabled = false;
-    document.getElementById("cancel" + String(eventId)).disabled = true;
-    alert("キャンセルしました");
   }
 
   function onFailure(e) {

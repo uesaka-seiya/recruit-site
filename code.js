@@ -79,8 +79,8 @@ function getStatus(userId, eventId) {
       break;
     }
   }
-  const disabledStatus = [eventId, entryDisabled, cancelDisabled];
-  return disabledStatus;
+  const result = [eventId, entryDisabled, cancelDisabled];
+  return result;
 }
 
 /**
@@ -92,7 +92,8 @@ function getStatus(userId, eventId) {
  */
 function setEntry(userId, eventId) {
   entryStatusSheet.getRange(entryLastRow + 1, 1, 1, 3).setValues([[new Date(), eventId, userId]]);
-  return eventId;
+  const result = [eventId, true, false, "申込を完了しました"];
+  return result;
 }
 
 /**
@@ -108,5 +109,6 @@ function deleteEntry(userId, eventId) {
       entryStatusSheet.deleteRows(i + 2);
     }
   }
-  return eventId;
+  const result = [eventId, false, true, "キャンセルしました"];
+  return result;
 }
