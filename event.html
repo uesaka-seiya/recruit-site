@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <?!= include('css'); ?>
+</head>
+<body>
+  <div class="wrapper">
+    <div id="header">
+      <h1>イベント詳細</h1>
+      <p id="user-name"><?= getUserName(userId); ?>さん</p>
+    </div>
+    <div class="main">
+      <div class="events">
+        <table>
+          <tr>
+            <th>イベント名</th>
+            <td><?= eventValues[eventId][0]; ?></td>
+          </tr>
+          <tr>
+            <th>実施日</th>
+            <td><?= Utilities.formatDate(eventValues[eventId][1], 'Asia/Tokyo', 'yyyy年MM月dd日'); ?></td>
+          </tr>
+          <tr>
+            <th>詳細</th>
+            <td><?= eventValues[eventId][2]; ?></td>
+          </tr>
+          <tr>
+            <th>申込期限</th>
+            <td><?= Utilities.formatDate(eventValues[eventId][3], 'Asia/Tokyo', 'yyyy年MM月dd日'); ?></td>
+          </tr>
+        </table>
+      </div>
+      <input type="submit" onclick="jump(<?= getScriptUrl(2) + '&id=' + userId; ?>)" value="マイページ（イベント一覧）へ戻る">
+    </div>
+    <div id="footer">採用サイト 2020 模擬開発
+    </div>
+  </div>
+</body>
+<script>
+  const userId = <?= userId ?>;
+  const eventValues = <?= eventValues ?>;
+  const eventNum = <?= eventNum ?>;
+  const eventId = <?= eventId ?>;
+
+  function onFailure(e) {
+    alert([e.message, e.stack]);
+  }
+
+  function jump(url) {
+    window.top.location.href = url;
+  }
+</script>
+</html>

@@ -18,11 +18,11 @@
             <th>内容</th>
             <th>申込状況</th>
           </tr>
-          <? for (var i = 0; i < eventNum ; i++) { ?>
+          <? for (let i = 0; i < eventNum ; i++) { ?>
           <tr>
             <td><?= Utilities.formatDate(eventValues[i][1], 'Asia/Tokyo', 'yyyy年MM月dd日'); ?>
             </td>
-            <td><?= eventValues[i][0]; ?></td>
+            <td><a href="<?= getLoggedInUrl(userId) + '&ev=' + i; ?>"><?= eventValues[i][0]; ?></a></td>
             <td>
               <button type="submit" id="<?= 'entry' + String(i); ?>" value="<?= i; ?>" onclick="entry(this.value)">申込</button>
               <button type="submit" id="<?= 'cancel' + String(i); ?>" value="<?= i; ?>" onclick="cancel(this.value)">キャンセル</button>
