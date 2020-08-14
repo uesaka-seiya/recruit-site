@@ -32,7 +32,7 @@
           <tr></tr>
         </table>
       </div>
-      <input type="submit" onclick="jump(<?= getScriptUrl(1); ?>)" value="ログアウト">
+      <input type="submit" onclick="logout();" value="ログアウト">
     </div>
     <div id="footer">採用サイト 2020 模擬開発
     </div>
@@ -82,8 +82,9 @@
     alert([e.message, e.stack]);
   }
 
-  function jump(url) {
-    window.top.location.href = url;
+  function logout() {
+    alert("ログアウトします");
+    window.top.location.href = <?= getScriptUrl(1); ?>;
   }
 </script>
 </html>
